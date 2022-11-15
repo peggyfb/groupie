@@ -131,7 +131,7 @@ $ yarn add datatables.net-bs
 $ yarn run encore dev
 </pre>
 
-<h2> <b>Paramétrage</b>
+<h2> <b>Paramétrage</b>           </h2>
 
 * Il faut configurer le ficher .env (renommer .env.example).
 Seuls les paramètres LDAP sont à renseigner (pas de base de données, pas d'envoi de mails)
