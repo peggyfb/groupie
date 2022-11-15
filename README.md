@@ -199,6 +199,7 @@ Le reste du paramétrage s'effectue dans les fichiers de config dans config. Il 
 
 * roles.yml : Il faut configurer les groupes qui auront les différents droits dans l'application
 
+<pre>
 role:
   rules:
     - { name: ROLE_MEMBRE,         type: ldap, rule: '(&(memberof=cn=personnel,ou=groups,dc=univ,dc=fr)(uid=login))' }
@@ -206,7 +207,7 @@ role:
     - { name: ROLE_DOSI,           type: ldap, rule: '(&(memberof=cn=dosi,ou=groups,dc=univ,dc=fr)(uid=login))' }
     - { name: ROLE_PRIVE,          type: ldap, rule: '(&(memberof=cn=dosi,ou=groups,dc=univ,dc=fr)(uid=login))' }
     - { name: ROLE_ADMIN,          type: ldap, rule: '(&(memberof=cn=groupie,ou=groups,dc=univ,dc=fr)(uid=login))' }
-
+</pre>
 
 
 Scripts PERL LDAP pour peupler des groupes basés sur des filtres (plus efficace que dynlist)
