@@ -99,6 +99,7 @@ de nouvelles fonctionnalités comme la modification des noms et caractéristique
 * composer installé
 * yarn installé
 
+
 <h2> <b>Installation du projet</b>       </h2>
 
 * Récupérer le projet depuis github
