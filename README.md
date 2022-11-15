@@ -199,13 +199,13 @@ Le reste du paramétrage s'effectue dans les fichiers de config dans config. Il 
 
 * roles.yml : Il faut configurer les groupes qui auront les différents droits dans l'application
 
-        roles:
-            - { name: "ROLE_MEMBRE",         type: "ldap",    link: "isMember",  values: "amu:glob:ldap:personnel" }
-            - { name: "ROLE_GESTIONNAIRE",   type: "ldap",    link: "isMember",  values: "amu:app:grp:grouper:grouper-ent" }
-            - { name: "ROLE_DOSI",           type: "ldap",    link: "isMember",  values: "amu:svc:dosi:tous" }
-            - { name: "ROLE_PRIVE",          type: "ldap",    link: "isMember",  values: "amu:svc:dosi:tous" }
-            - { name: "ROLE_ADMIN",          type: "ldap",    link: "isMember",  values: "amu:adm:app:groupie" }
-            - { name: "ROLE_SUPER_ADMIN",    type: "session",  link: "_isDevelopper",  values: "1" }
+role:
+  rules:
+    - { name: ROLE_MEMBRE,         type: ldap, rule: '(&(memberof=cn=personnel,ou=groups,dc=univ,dc=fr)(uid=login))' }
+    - { name: ROLE_GESTIONNAIRE,   type: ldap, rule: '(&(memberof=cn=gest,ou=groups,dc=univ,dc=fr)(uid=login))' }
+    - { name: ROLE_DOSI,           type: ldap, rule: '(&(memberof=cn=dosi,ou=groups,dc=univ,dc=fr)(uid=login))' }
+    - { name: ROLE_PRIVE,          type: ldap, rule: '(&(memberof=cn=dosi,ou=groups,dc=univ,dc=fr)(uid=login))' }
+    - { name: ROLE_ADMIN,          type: ldap, rule: '(&(memberof=cn=groupie,ou=groups,dc=univ,dc=fr)(uid=login))' }
 
 
 
