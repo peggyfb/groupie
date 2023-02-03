@@ -1,4 +1,17 @@
 <?php
+/*
+ * Copyright 2022, ESUP-Portail  http://www.esup-portail.org/
+ *  Licensed under APACHE2
+ *  @author  Arnaud Salvucci <arnaud.salvucci@univ-amu.fr>
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
 /**
  * Classe qui définie un rôle en fonction d'un login ou d'un tableau de login.
  *

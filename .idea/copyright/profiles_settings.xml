@@ -1,0 +1,13 @@
+<component name="CopyrightManager">
+  <settings default="Groupie">
+    <module2copyright>
+      <element module="Project Files" copyright="Groupie" />
+    </module2copyright>
+    <LanguageOptions name="JavaScript">
+      <option name="fileTypeOverride" value="1" />
+    </LanguageOptions>
+    <LanguageOptions name="SCSS">
+      <option name="fileTypeOverride" value="1" />
+    </LanguageOptions>
+  </settings>
+</component>
