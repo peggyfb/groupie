@@ -29,10 +29,17 @@ class LdapFonctions
         $this->config_private = $config_private;
     }
 
-    public function recherche($filtre, $restriction, $tri)
+    public function recherche($filtre, $restriction, $flagGroup=0, $tri)
     {
+        if($flagGroup) {
+            // on cherche sur la branche des groupes
+            $branch = $this->config_groups['group_branch'];
+        }else {
+            $branch = $this->config_users['people_branch'];
+        }
+
         // Recherche avec les filtres et restrictions demandés
-        $query = $this->ldap->query($this->base_dn, $filtre, array('filter' => $restriction));
+        $query = $this->ldap->query($branch.','.$this->base_dn, $filtre, array('filter' => $restriction));
         $arData = $query->execute()->toArray();
 
         if ($tri!="no") {
@@ -75,9 +82,9 @@ class LdapFonctions
      * Récupération des infos d'un user
      */
     public function getInfosUser($uid) {
-        $filtre = $this->config_users['uid']."=" . $uid;
-        $restriction = array($this->config_users['uid'], $this->config_users['displayname'], $this->config_users['mail'], $this->config_users['tel'], $this->config_users['name'], $this->config_users['primaff'], $this->config_users['aff']);
-        $result = $this->recherche($filtre, $restriction, $this->config_users['uid']);
+        $filtre = $this->config_users['login']."=" . $uid;
+        $restriction = array($this->config_users['login'], $this->config_users['displayname'], $this->config_users['mail'], $this->config_users['tel'], $this->config_users['name'], $this->config_users['primaff'], $this->config_users['aff']);
+        $result = $this->recherche($filtre, $restriction, 0, $this->config_users['login']);
         return $result;
     }
 
@@ -86,8 +93,8 @@ class LdapFonctions
      */
     public function getMembersGroup($groupName) {
         $filtre = $this->config_groups['memberof']."=".$this->config_groups['cn']."=" . $groupName . ", ".$this->config_groups['group_branch'].", ".$this->base_dn;
-        $restriction = array($this->config_users['uid'], $this->config_users['displayname'], $this->config_users['mail'], $this->config_users['tel'], $this->config_users['name'], $this->config_users['primaff'], $this->config_users['aff']);
-        $result = $this->recherche($filtre, $restriction, "no");
+        $restriction = array($this->config_users['login'], $this->config_users['displayname'], $this->config_users['mail'], $this->config_users['tel'], $this->config_users['name'], $this->config_users['primaff'], $this->config_users['aff']);
+        $result = $this->recherche($filtre, $restriction, 0,"no");
         return $result;
     }
 
@@ -97,7 +104,7 @@ class LdapFonctions
     public function getAdminsGroup($groupName) {
         $filtre = $this->config_groups['cn']."=". $groupName ;
         $restriction = array($this->config_groups['groupadmin']);
-        $result = $this->recherche($filtre, $restriction, "no");
+        $result = $this->recherche($filtre, $restriction, 1, "no");
         return $result;
     }
 
@@ -109,7 +116,7 @@ class LdapFonctions
         $arDnMembers = array();
         foreach ($arUserUid as $uid)
         {
-            $arDnMembers[] = $this->config_users['uid']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
+            $arDnMembers[] = $this->config_users['login']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
         }
 
         // Entry manager
@@ -139,7 +146,7 @@ class LdapFonctions
         $arDnMembers = array();
         foreach ($arUserUid as $uid)
         {
-            $arDnMembers[] = $this->config_users['uid']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
+            $arDnMembers[] = $this->config_users['login']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
         }
 
         // Entry manager
@@ -169,7 +176,7 @@ class LdapFonctions
         $arDnAdmins = array();
         foreach ($arUserUid as $uid)
         {
-            $arDnAdmins[] = $this->config_users['uid']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
+            $arDnAdmins[] = $this->config_users['login']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
         }
         // Entry manager
         $entryManager = $this->ldap->getEntryManager();
@@ -199,7 +206,7 @@ class LdapFonctions
         $arDnAdmins = array();
         foreach ($arUserUid as $uid)
         {
-            $arDnAdmins[] = $this->config_users['uid']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
+            $arDnAdmins[] = $this->config_users['login']."=".$uid.",".$this->config_users['people_branch'].",".$this->base_dn;
         }
         // Entry manager
         $entryManager = $this->ldap->getEntryManager();
@@ -252,7 +259,7 @@ class LdapFonctions
     public function getAmuGroupFilter($cn_group) {
 
         $filtre = $this->config_groups['cn']."=" . $cn_group;
-        $result = $this->recherche($filtre, array($this->config_groups['groupfilter']), $this->config_groups['cn']);
+        $result = $this->recherche($filtre, array($this->config_groups['groupfilter']), 1, $this->config_groups['cn']);
         if (null !== $result[0]->getAttribute($this->config_groups['groupfilter']))
             $amugroupfilter = $result[0]->getAttribute($this->config_groups['groupfilter'])[0];
         else
@@ -399,15 +406,15 @@ class LdapFonctions
     public function getUidFromMail($mail, $restriction = array("uid", "displayName", "sn", "mail", "telephonenumber", "memberof")) {
 	$filtre = "(&(".$this->config_users['mail']."=" . $mail . ")" . $this->config_users['filter'] . ")";
         $AllInfos = array();
-        $AllInfos = $this->recherche($filtre, $restriction, $this->config_users['mail']);
+        $AllInfos = $this->recherche($filtre, $restriction, 0, $this->config_users['mail']);
 
         return $AllInfos;
     }
 
     public function TestUid($uid, $restriction = array("uid", "sn", "displayName", "mail", "telephonenumber", "memberof")) {
-        $filtre = "(&(".$this->config_users['uid']."=" . $uid . ")" . $this->config_users['filter'] . ")";
+        $filtre = "(&(".$this->config_users['login']."=" . $uid . ")" . $this->config_users['filter'] . ")";
         $AllInfos = array();
-        $AllInfos = $this->recherche($filtre, $restriction, $this->config_users['uid']);
+        $AllInfos = $this->recherche($filtre, $restriction, 0, $this->config_users['login']);
 
         return $AllInfos;
     }

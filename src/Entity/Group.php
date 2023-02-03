@@ -176,19 +176,19 @@ public function getFlag()
 
  */
 
- public function infosGroupeLdap() 
+ public function infosGroupeLdap($param_cn, $param_desc, $param_groupfilter, $param_objectclass)
  {
    $addgroup = array();
 
-   $addgroup['cn'] = $this->cn;
-   $addgroup['description'] = $this->description;
+   $addgroup[$param_cn] = $this->cn;
+   $addgroup[$param_desc] = $this->description;
    if ($this->amugroupfilter != "") {
-        $addgroup['amuGroupFilter'] = $this->amugroupfilter;
+        $addgroup[$param_groupfilter] = $this->amugroupfilter;
    }
-   
-   $addgroup['objectClass'][0] = "groupOfNames";
-   $addgroup['objectClass'][1] = "AMUGroup";
-   $addgroup['objectClass'][2] = "top";
+
+   foreach ($param_objectclass as $param_objectclass) {
+       $addgroup['objectClass'][] = $param_objectclass;
+   }
 
     return($addgroup);
  }

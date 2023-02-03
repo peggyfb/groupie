@@ -3,6 +3,6 @@
 config/packages/roles.yaml
 .env
 /node_modules
-/public
+/public/build
 /vendor
 /var
