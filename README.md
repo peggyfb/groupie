@@ -120,7 +120,7 @@ $ composer update
 
 <pre>
 $ yarn install
-$ yarn add sass-loader node-sass --dev
+$ yarn add sass-loader@7.0.1 node-sass --dev
 $ yarn add bootstrap@3 jquery material-design-icons-iconfont
 $ yarn add datatables.net-bs
 </pre>
@@ -158,20 +158,23 @@ Le reste du paramétrage s'effectue dans les fichiers de config dans config. Il 
                 facility: LOG_SYSLOG
             users:
                 people_branch: ou=people
-                uid: uid
+                login: uid
                 name: sn
                 givenname: givenName
                 displayname: cn
                 mail: mail
                 tel: telephoneNumber
                 comp: amuComposante
-                aff: amuAffectationLib
+                aff: amuAffectationlib
                 primaff: eduPersonPrimaryAffiliation
                 campus: amuCampus
                 site: amuSite
                 filter: (&(!(eduPersonPrimaryAffiliation=student))(!(eduPersonPrimaryAffiliation=alum))(amuDateValidation=*))
             groups:
-                object_class: groupOfNames
+                object_class:
+                    - groupOfNames
+                    - AMUGroup
+                    - top
                 group_branch: ou=groups
                 cn: cn
                 desc: description
@@ -179,6 +182,7 @@ Le reste du paramétrage s'effectue dans les fichiers de config dans config. Il 
                 memberof: memberOf
                 groupfilter: amuGroupFilter
                 groupadmin: amuGroupAdmin
+                separator: ':'
             private:
                 private_branch: ou=private
                 prefix: amu:perso
